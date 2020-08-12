@@ -1,0 +1,24 @@
+{
+  "name": "Verzeilberg/upload-images",
+  "license": "GPL-2.0-only",
+  "version": "0.0.1",
+  "type": "symfony-bundle",
+  "description": "Cool and reusable bundle",
+  "minimum-stability": "dev",
+  "authors": [
+    {
+      "name": "sander",
+      "email": "email@example.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Verzeilberg\\UploadImagesBundle\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Verzeilberg\\UploadImagesBundle\\Tests\\": "tests"
+    }
+  }
+}
