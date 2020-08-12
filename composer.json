@@ -1,5 +1,5 @@
 {
-  "name": "Verzeilberg/upload-images",
+  "name": "verzeilberg/upload-images",
   "license": "GPL-2.0-only",
   "version": "0.0.1",
   "type": "symfony-bundle",
@@ -13,12 +13,12 @@
   ],
   "autoload": {
     "psr-4": {
-      "Verzeilberg\\UploadImagesBundle\\": "src"
+      "verzeilberg\\UploadImagesBundle\\": "src"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Verzeilberg\\UploadImagesBundle\\Tests\\": "tests"
+      "verzeilberg\\UploadImagesBundle\\Tests\\": "tests"
     }
   }
 }

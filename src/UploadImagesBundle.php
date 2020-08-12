@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Verzeilberg\UploadImagesBundle;
+namespace verzeilberg\UploadImagesBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Verzeilberg\UploadImagesBundle\DependencyInjection;
+namespace verzeilberg\UploadImagesBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
