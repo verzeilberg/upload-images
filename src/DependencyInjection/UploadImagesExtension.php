@@ -20,7 +20,5 @@ class UploadImagesExtension extends Extension
         $loader->load('services.yaml');
 
         $container->setParameter('upload_images.config', $config);
-echo '<pre>';
-        print_r($config);
     }
 }
