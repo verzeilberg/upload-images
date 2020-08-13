@@ -1,6 +1,6 @@
 <?php
 
-namespace Verzeilberg\UploadImagesBundle\Service;
+namespace verzeilberg\UploadImagesBundle\Service;
 
 
 class Rotate
