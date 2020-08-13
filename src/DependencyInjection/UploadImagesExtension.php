@@ -18,7 +18,7 @@ class UploadImagesExtension extends Extension
 
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
-
-        var_dump($config); die;
+echo '<pre>';
+        print_r($config);
     }
 }
