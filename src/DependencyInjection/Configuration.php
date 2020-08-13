@@ -10,7 +10,7 @@ class Configuration implements ConfigurationInterface
 {
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder('upload-images');
+        $treeBuilder = new TreeBuilder('upload_images');
 
         $treeBuilder->getRootNode()
                 ->children()
