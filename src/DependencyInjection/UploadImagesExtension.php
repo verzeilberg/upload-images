@@ -19,6 +19,10 @@ class UploadImagesExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        $container->setParameter('upload-images.config', $config);
+        var_dump($config);
+
+        $definition = $container->getDefinition('upload.images.image');
+        $definition->replaceArgument(0, $config['image']['save_original']);
+        $definition->replaceArgument(1, $config['image']['crop_size']);
     }
 }
