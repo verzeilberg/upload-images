@@ -16,6 +16,7 @@ class UploadImagesExtension extends Extension
         $loader = new YamlFileLoader($container, new FileLocator(dirname(__DIR__).'/Resources'));
         $loader->load('services.yaml');
 
+        $loader->load('config.yaml');
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 echo '<pre>';
