@@ -16,9 +16,12 @@ class UploadImagesExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
+        var_dump($config); die;
+
+
         $loader = new YamlFileLoader($container, new FileLocator(dirname(__DIR__).'/Resources'));
         $loader->load('services.yaml');
 
-        $container->setParameter('upload_images.image.save_original', $config['save_original']);
+
     }
 }
