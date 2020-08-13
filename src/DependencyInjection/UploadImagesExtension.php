@@ -19,8 +19,6 @@ class UploadImagesExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-
-
         $container->setParameter('upload-images.config', $config);
     }
 }
