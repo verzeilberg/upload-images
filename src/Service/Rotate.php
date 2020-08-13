@@ -2,16 +2,21 @@
 
 namespace verzeilberg\UploadImagesBundle\Service;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class Rotate
 {
 
+    private $params;
 
-    public function Rotate(ContainerBuilder $container)
+    public function __construct(ParameterBagInterface $params)
     {
+        $this->params = $params;
+    }
 
-        var_dump($container);
+    public function Rotate()
+    {
+        $parameterValue = $this->params->get('parameter_name');
         die('fdsfsdfs');
     }
 
