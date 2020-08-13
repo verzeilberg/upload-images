@@ -22,7 +22,7 @@ class Configuration implements ConfigurationInterface
                     ->end() // twitter
                 ->end();
 
-        var_dump($treeBuilder); die;
+        var_dump($treeBuilder);
 
         return $treeBuilder;
 
