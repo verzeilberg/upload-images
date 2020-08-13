@@ -13,12 +13,12 @@ class UploadImagesExtension extends Extension
 {
     public function load(array $configs, ContainerBuilder $container)
     {
+        $configuration = new Configuration();
+        $config = $this->processConfiguration($configuration, $configs);
+
         $loader = new YamlFileLoader($container, new FileLocator(dirname(__DIR__).'/Resources'));
         $loader->load('services.yaml');
 
-        $loader->load('config.yaml');
-        $configuration = new Configuration();
-        $config = $this->processConfiguration($configuration, $configs);
         $container->setParameter('upload_images.config', $config);
 echo '<pre>';
         print_r($config);
