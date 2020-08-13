@@ -1,0 +1,3 @@
+services:
+  verzeilberg\UploadImagesBundle\Service\Rotate:
+    autowire: true
