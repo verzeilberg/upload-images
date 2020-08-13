@@ -22,5 +22,6 @@ class Configuration implements ConfigurationInterface
                     ->end() // twitter
                 ->end();
         return $treeBuilder;
+
     }
 }
