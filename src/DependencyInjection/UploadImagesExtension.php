@@ -19,6 +19,7 @@ class UploadImagesExtension extends Extension
         $loader->load('config.yaml');
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
+        $container->setParameter('upload_images.config', $config);
 echo '<pre>';
         print_r($config);
     }
