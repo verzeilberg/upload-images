@@ -16,7 +16,7 @@ class Rotate
 
     public function Rotate()
     {
-        var_dump($this->params); die;
+        $parameterValue = $this->params->get('save_original');
     }
 
 }
