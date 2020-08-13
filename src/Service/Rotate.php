@@ -7,18 +7,11 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 class Rotate
 {
 
-    private $container;
 
-    public function __construct(ContainerBuilder $container)
-    {
-        $this->container = $container;
-    }
-
-    public function Rotate()
+    public function Rotate(ContainerBuilder $container)
     {
 
-        $username = $this->container->getParameter('save_original');
-        var_dump($username);
+        var_dump($container);
         die('fdsfsdfs');
     }
 
