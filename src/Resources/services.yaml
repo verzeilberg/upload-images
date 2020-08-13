@@ -2,6 +2,6 @@ services:
   verzeilberg\UploadImagesBundle\Service\Rotate:
     autowire: true
 
-upload-images:
+upload_images:
   image:
     save_original: true
