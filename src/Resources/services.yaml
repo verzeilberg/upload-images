@@ -2,7 +2,7 @@ services:
   verzeilberg\UploadImagesBundle\Service\Rotate:
     autowire: true
 
-upload_images:
+verzeilberg_upload_images:
   image:
     save_original: true
     crop_size: true
