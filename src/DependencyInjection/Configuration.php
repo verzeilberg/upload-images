@@ -11,6 +11,16 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder('upload-images');
+
+        $treeBuilder->getRootNode()
+                ->children()
+                    ->arrayNode('image')
+                        ->children()
+                            ->integerNode('save_original')->end()
+                            ->scalarNode('crop_size')->end()
+                        ->end()
+                    ->end() // twitter
+                ->end();
         return $treeBuilder;
     }
 }

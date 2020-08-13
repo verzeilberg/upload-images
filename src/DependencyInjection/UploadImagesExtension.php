@@ -12,9 +12,10 @@ class UploadImagesExtension extends Extension
 {
     public function load(array $configs, ContainerBuilder $container)
     {
+        $loader = new XmlFileLoader($container, new FileLocator(dirname(__DIR__).'/Resources'));
+        $loader->load('services.xml');
+
         $configuration = new Configuration();
-        $this->processConfiguration($configuration, $configs);
-        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources'));
-        $loader->load('services.yaml');
+        $config = $this->processConfiguration($configuration, $configs);
     }
 }
