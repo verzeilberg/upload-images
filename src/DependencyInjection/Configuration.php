@@ -16,7 +16,7 @@ class Configuration implements ConfigurationInterface
                 ->children()
                     ->arrayNode('image')
                         ->children()
-                            ->integerNode('save_original')->end()
+                            ->integerNode('save_originalll')->end()
                             ->scalarNode('crop_size')->end()
                         ->end()
                     ->end() // twitter
