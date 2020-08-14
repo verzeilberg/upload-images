@@ -15,6 +15,9 @@ class Configuration implements ConfigurationInterface
                 ->children()
                     ->integerNode('version')->end()
                 ->end();
+
+        var_dump($treeBuilder); die;
+
         return $treeBuilder;
     }
 }
