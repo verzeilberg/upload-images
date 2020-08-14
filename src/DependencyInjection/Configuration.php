@@ -10,9 +10,9 @@ class Configuration implements ConfigurationInterface
 {
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('upload_images');
-        $rootNode->children()
+        $treeBuilder = new TreeBuilder('upload_images');
+        $treeBuilder->getRootNode()
+                ->children()
                     ->arrayNode('image')
                         ->children()
                             ->integerNode('save_original')->end()
@@ -21,6 +21,5 @@ class Configuration implements ConfigurationInterface
                     ->end()
                 ->end();
         return $treeBuilder;
-
     }
 }
