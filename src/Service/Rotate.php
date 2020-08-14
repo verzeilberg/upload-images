@@ -16,7 +16,6 @@ class Rotate
 
     public function Rotate()
     {
-        print_r($this->params); die;
     }
 
 }
