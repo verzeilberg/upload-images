@@ -13,12 +13,7 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder('upload_images');
         $treeBuilder->getRootNode()
                 ->children()
-                    ->arrayNode('image')
-                        ->children()
-                            ->integerNode('save_original')->end()
-                            ->scalarNode('crop_size')->end()
-                        ->end()
-                    ->end()
+                    ->integerNode('version')->end()
                 ->end();
         return $treeBuilder;
     }

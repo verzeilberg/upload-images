@@ -21,7 +21,7 @@ class UploadImagesExtension extends Extension
 
         var_dump($config); die;
 
-        //$container->setParameter('upload_images.image.save_original', $config['image.save_original']);
+        //$container->setParameter('version', $config['version']);
 
 
     }
