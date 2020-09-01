@@ -18,7 +18,7 @@ class UploadImagesExtension extends Extension
         $loader = new YamlFileLoader($container, new FileLocator(dirname(__DIR__).'/Resources'));
         $loader->load('services.yaml');
 
-        $definition = $container->getDefinition('upload_images.app.mailer');
+        $definition = $container->getDefinition('upload_images.rotate');
         $definition->setArgument(0, $config['version']);
     }
 }
