@@ -2,7 +2,7 @@
 
 namespace verzeilberg\UploadImagesBundle\Service;
 
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class Rotate
 {
