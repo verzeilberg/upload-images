@@ -1,3 +1,4 @@
 services:
   verzeilberg\UploadImagesBundle\Service\Rotate:
     autowire: true
+    arguments: [%upload_images%]
