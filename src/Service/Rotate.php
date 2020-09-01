@@ -7,16 +7,15 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 class Rotate
 {
 
-    private $params;
-
-    public function __construct(ParameterBagInterface $params)
+    private $container; // <- Add this
+    public function __construct(ContainerInterface $container) // <- Add this
     {
-        $this->params = $params;
+        $this->container = $container;
     }
 
     public function Rotate()
     {
-var_dump($this->params); die;
+var_dump($this->container); die;
 
         return true;
     }
