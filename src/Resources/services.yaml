@@ -2,3 +2,4 @@ services:
   verzeilberg\UploadImagesBundle\Service\Rotate:
     autowire: true
     autoconfigure: true
+    public: true
