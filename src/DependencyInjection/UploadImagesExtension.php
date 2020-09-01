@@ -13,17 +13,9 @@ class UploadImagesExtension extends Extension
 {
     public function load(array $configs, ContainerBuilder $container)
     {
-
-
         $config = $this->processConfiguration(new Configuration(), $configs);
         $container->setParameter('upload_files.version', $config['version']);
-
         $loader = new YamlFileLoader($container, new FileLocator(dirname(__DIR__).'/Resources'));
         $loader->load('services.yaml');
-
-        var_dump($config);
-        var_dump($container);
-        die('You shall not pass!');
-
     }
 }

@@ -16,6 +16,7 @@ class Rotate
 
     public function Rotate()
     {
+var_dump($this->params); die;
 
         return true;
     }
