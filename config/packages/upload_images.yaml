@@ -1,3 +1,2 @@
-parameters:
-  upload_images:
-    version: 100
+upload_images:
+  version: 100

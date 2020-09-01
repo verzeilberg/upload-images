@@ -17,5 +17,8 @@ class UploadImagesExtension extends Extension
         $container->setParameter('upload_files.version', $config['version']);
         $loader = new YamlFileLoader($container, new FileLocator(dirname(__DIR__).'/Resources'));
         $loader->load('services.yaml');
+
+        $definition = $container->getDefinition('upload_files.version');
+        $definition->setArgument(0, $config['version']);
     }
 }
