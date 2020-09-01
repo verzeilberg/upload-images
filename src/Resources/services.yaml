@@ -1,6 +1,5 @@
 services:
   upload_images:
     class: verzeilberg\UploadImagesBundle\Service\Rotate
-      autowire: true
-      autoconfigure: true
-      public: false
+    autowire: true
+    autoconfigure: true
