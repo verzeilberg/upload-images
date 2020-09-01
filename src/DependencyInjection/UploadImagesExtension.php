@@ -16,14 +16,14 @@ class UploadImagesExtension extends Extension
 
 
         $config = $this->processConfiguration(new Configuration(), $configs);
-
-        var_dump($config); die('You shall not pass!');
-
-
         $container->setParameter('upload_files.version', $config['version']);
 
         $loader = new YamlFileLoader($container, new FileLocator(dirname(__DIR__).'/Resources'));
         $loader->load('services.yaml');
+
+        var_dump($config);
+        var_dump($container);
+        die('You shall not pass!');
 
     }
 }
