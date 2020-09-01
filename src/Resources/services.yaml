@@ -1,6 +1,9 @@
 services:
-  app.mailer:
-    alias:  verzeilberg\UploadImagesBundle\Service\Rotate
+  verzeilberg\UploadImagesBundle\Service\Rotate:
     autowire: true
     autoconfigure: true
-    public: true
+    public: false
+
+    app.mailer:
+      alias: verzeilberg\UploadImagesBundle\Service\Rotate
+      public: true
