@@ -13,6 +13,8 @@ class UploadImagesExtension extends Extension
 {
     public function load(array $configs, ContainerBuilder $container)
     {
+
+        die('dfsdfs');
         $config = $this->processConfiguration(new Configuration(), $configs);
         $container->setParameter('upload_files.version', $config['version']);
 

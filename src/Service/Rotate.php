@@ -16,6 +16,8 @@ class Rotate
 
     public function Rotate()
     {
+
+        return true;
     }
 
 }
