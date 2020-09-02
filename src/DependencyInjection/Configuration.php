@@ -1,6 +1,5 @@
 <?php
 
-
 namespace verzeilberg\UploadImagesBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
