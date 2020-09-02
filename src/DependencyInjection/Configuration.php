@@ -13,7 +13,8 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder('upload_images');
         $treeBuilder->getRootNode()
                 ->children()
-                    ->integerNode('version')->defaultValue(100)->end()
+                    ->stringNode('upload_folder')->defaultValue('%kernel.project_dir%/public/uploads/images')->info('Folder where the images will be uploaded')->end()
+                    ->integerNode('max_file_size')->defaultValue(20000000)->info('Max file size in bytes')->end()
                 ->end();
         return $treeBuilder;
     }
