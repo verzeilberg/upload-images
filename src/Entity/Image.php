@@ -39,7 +39,6 @@ class Image
 
     /**
      * @ORM\Column(name="sort_order", type="integer", length=11, nullable=true);
-     * @Annotation\Required(false)
      */
     protected $sortOrder = 0;
 
