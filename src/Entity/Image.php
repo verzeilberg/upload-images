@@ -4,6 +4,7 @@ namespace verzeilberg\UploadImagesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="Verzeilberg\UploadImagesBundle\Repository\ImageRepository")
@@ -25,6 +26,7 @@ class Image
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
      */
     protected $nameImage;
 
