@@ -3,6 +3,8 @@
 
 namespace Verzeilberg\UploadImagesBundle\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+
 /**
  * @ORM\Entity(repositoryClass="Verzeilberg\UploadImagesBundle\Repository\ImageTypeRepository")
  * @ORM\Table(name="image_type",uniqueConstraints={@ORM\UniqueConstraint(name="search_idx", columns={"file_name"})})
