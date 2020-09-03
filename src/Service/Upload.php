@@ -4,7 +4,7 @@ namespace verzeilberg\UploadImagesBundle\Service;
 
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
-class Rotate
+class Upload
 {
 
     private $params;
