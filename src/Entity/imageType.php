@@ -3,7 +3,10 @@
 
 namespace Verzeilberg\UploadImagesBundle\Entity;
 
-
+/**
+ * @ORM\Entity(repositoryClass="Verzeilberg\UploadImagesBundle\Repository\ImageTypeRepository")
+ * @ORM\Table(name="image_type",uniqueConstraints={@ORM\UniqueConstraint(name="search_idx", columns={"file_name"})})
+ */
 class imageType
 {
     /**
