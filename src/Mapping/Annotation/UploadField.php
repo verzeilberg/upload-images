@@ -13,6 +13,6 @@ class UploadField
     /**
      * @var string
      */
-    protected $mapping;
+    public $mapping;
 
 }
