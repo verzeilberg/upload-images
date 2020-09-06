@@ -7,12 +7,30 @@ namespace verzeilberg\UploadImagesBundle\Mapping\Annotation;
  * @Annotation
  * @Target({"PROPERTY"})
  */
-class UploadField
+final class UploadField
 {
 
     /**
      * @var string
      */
-    public $mapping;
+    protected $mapping;
+
+    /**
+     * @return string
+     */
+    public function getMapping(): string
+    {
+        return $this->mapping;
+    }
+
+    /**
+     * @param string $mapping
+     */
+    public function setMapping(string $mapping): void
+    {
+        $this->mapping = $mapping;
+    }
+
+
 
 }
