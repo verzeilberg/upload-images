@@ -3,14 +3,19 @@
   "license": "GPL-2.0-only",
   "version": "0.0.1",
   "type": "symfony-bundle",
-  "description": "Cool and reusable bundle",
+  "description": "Bundle to upload, crop and or resize images",
   "minimum-stability": "dev",
   "authors": [
     {
       "name": "sander",
-      "email": "email@example.com"
+      "email": "sander@verzeilberg.nl"
     }
   ],
+  "require": {
+    "php": "^7.4.*",
+    "doctrine/annotations": "^1.10.4"
+
+  },
   "autoload": {
     "psr-4": {
       "verzeilberg\\UploadImagesBundle\\": "src"
