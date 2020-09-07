@@ -5,32 +5,22 @@ namespace verzeilberg\UploadImagesBundle\Metadata\Reader;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
+use ReflectionClass;
 use verzeilberg\UploadImagesBundle\Mapping\Annotation\UploadField;
 
 class ImageAnnotationReader
 {
 
-    /** @var AnnotationReader */
-    protected $reader;
-
-    public function __construct(AnnotationReader $reader)
-    {
-        $this->reader = $reader;
-    }
-
-    public function loadMetadataForClass(\ReflectionClass $class)
+    public function loadMetadataForClass($class)
     {
 
-        $properties = [];
-        $properties = \array_merge($properties, $class->getProperties());
+        $reader = new AnnotationReader();
 
-        var_dump($properties); die;
+        $reflClass = new ReflectionClass($class);
+        $property = $reflClass->getProperties();
 
-        foreach ($properties as $property) {
-            $myAnnotation = $this->reader->getPropertyAnnotation($property, UploadField::class);
-        }
+        var_dump($property);
 
-        echo $myAnnotation->myProperty; // result: "value"
     }
 
 }
