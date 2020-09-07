@@ -17,9 +17,17 @@ class ImageAnnotationReader
         $reader = new AnnotationReader();
 
         $reflClass = new ReflectionClass($class);
-        $property = $reflClass->getProperties();
+        $properties = $reflClass->getProperties();
 
-        var_dump($property);
+        $reader = new AnnotationReader();
+
+        foreach($properties as $property) {
+            $myAnnotation = $reader->getPropertyAnnotation($property, UploadField::class);
+            var_dump($myAnnotation);
+        }
+
+die;
+
 
     }
 
