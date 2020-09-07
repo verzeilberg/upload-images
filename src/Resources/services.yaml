@@ -2,5 +2,8 @@ services:
   verzeilberg\UploadImagesBundle\Service\Rotate:
     autowire: true
 
+  verzeilberg\UploadImagesBundle\Metadata\Reader\ImageAnnotationReader:
+    autowire: true
+
   upload_images.rotate:
     class: verzeilberg\UploadImagesBundle\Service\Rotate
