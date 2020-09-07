@@ -1,13 +1,13 @@
 <?php
 
 
-namespace verzeilberg\UploadImagesBundle\Metadata\Driver;
+namespace verzeilberg\UploadImagesBundle\Metadata\Reader;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use verzeilberg\UploadImagesBundle\Mapping\Annotation\UploadField;
 
-class Annotation
+class ImageAnnotationReader
 {
 
     /** @var AnnotationReader */

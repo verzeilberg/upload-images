@@ -3,7 +3,7 @@
 namespace verzeilberg\UploadImagesBundle\Service;
 
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use verzeilberg\UploadImagesBundle\Metadata\Driver\Annotation;
+use verzeilberg\UploadImagesBundle\Metadata\Reader\Annotation;
 
 class Upload
 {
