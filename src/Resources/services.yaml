@@ -1,9 +1,12 @@
 services:
+
+  _defaults:
+    autowire: true      # Automatically injects dependencies in your services.
+    autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
   verzeilberg\UploadImagesBundle\Service\Rotate:
-    autowire: true
 
   verzeilberg\UploadImagesBundle\Metadata\Reader\ImageAnnotationReader:
-    autowire: true
 
   upload_images.rotate:
     class: verzeilberg\UploadImagesBundle\Service\Rotate
