@@ -22,11 +22,11 @@ class ImageAnnotationReader
         $reader = new AnnotationReader();
 
         foreach($properties as $property) {
-            $myAnnotation = $reader->getPropertyAnnotation($property, UploadField::class);
-
-            if($myAnnotation == UploadField::class) {
-                var_dump($myAnnotation->mapping);
+            $uploadField = $reader->getPropertyAnnotation($property, UploadField::class);
+            if (null === $uploadField) {
+                continue;
             }
+            var_dump($uploadField->mapping);
         }
 
 die;
