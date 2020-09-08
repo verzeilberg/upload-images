@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Verzeilberg\UploadImagesBundle\Entity;
+namespace verzeilberg\UploadImagesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
