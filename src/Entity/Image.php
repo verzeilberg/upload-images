@@ -22,7 +22,7 @@ class Image
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $image;
+    private $imageFile;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -75,21 +75,6 @@ class Image
         $this->id = $id;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getImage()
-    {
-        return $this->image;
-    }
-
-    /**
-     * @param mixed $image
-     */
-    public function setImage($image): void
-    {
-        $this->image = $image;
-    }
 
     /**
      * @return mixed
@@ -169,6 +154,22 @@ class Image
     public function setImageTypes(ArrayCollection $imageTypes): void
     {
         $this->imageTypes = $imageTypes;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getImageFile()
+    {
+        return $this->imageFile;
+    }
+
+    /**
+     * @param mixed $imageFile
+     */
+    public function setImageFile($imageFile): void
+    {
+        $this->imageFile = $imageFile;
     }
 
 
