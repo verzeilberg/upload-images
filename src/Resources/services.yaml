@@ -10,3 +10,13 @@ services:
 
   upload_images.rotate:
     class: verzeilberg\UploadImagesBundle\Service\Rotate
+
+doctrine:
+  orm:
+    mappings:
+      UploadImagesBundle:
+        is_bundle: true
+        type: annotation
+        dir: 'Entity'
+        prefix: 'verzeilberg\UploadImagesBundle\Entity'
+        alias: UploadImagesBundle
