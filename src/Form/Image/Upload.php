@@ -44,9 +44,9 @@ class Upload extends AbstractType
                     ])
                 ]
             ])
-            ->add('nameImage', TextType::class)
-            ->add('alt', TextType::class)
-            ->add('descriptionImage', TextType::class)
+            ->add('nameImage', TextType::class, ['data_class' => null])
+            ->add('alt', TextType::class, ['data_class' => null])
+            ->add('descriptionImage', TextType::class, ['data_class' => null])
         ;
     }
 
