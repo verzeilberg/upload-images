@@ -173,4 +173,8 @@ class Image
     }
 
 
+    public function serialize()
+    {
+        // TODO: Implement serialize() method.
+    }
 }
