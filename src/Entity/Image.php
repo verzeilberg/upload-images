@@ -4,13 +4,14 @@ namespace verzeilberg\UploadImagesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Serializable;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="Verzeilberg\UploadImagesBundle\Repository\ImageRepository")
  * @ORM\Table(name="image",uniqueConstraints={@ORM\UniqueConstraint(name="search_idx", columns={"name_image"})})
  */
-class Image
+class Image implements Serializable
 {
     /**
      * @ORM\Id()
@@ -175,6 +176,17 @@ class Image
 
     public function serialize()
     {
-        // TODO: Implement serialize() method.
+        return serialize(array(
+        $this->id,
+        $this->nameImage,
+
+    ));
+    }
+
+    public function unserialize($serialized)
+    {
+        list (
+            $this->id,
+            ) = unserialize($serialized);
     }
 }
