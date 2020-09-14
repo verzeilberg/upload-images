@@ -8,7 +8,7 @@ use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Events;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
 
-class DatabaseActivitySubscriber implements EventSubscriber
+class AnnotationListener implements EventSubscriber
 {
     // this method can only return the event names; you cannot define a
     // custom method name to execute when each event triggers
