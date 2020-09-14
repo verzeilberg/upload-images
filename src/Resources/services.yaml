@@ -10,3 +10,7 @@ services:
 
   upload_images.rotate:
     class: verzeilberg\UploadImagesBundle\Service\Rotate
+
+  verzeilberg\UploadImagesBundle\EventListener\AnnotationListener:
+    tags:
+      - { name: 'doctrine.event_subscriber' }
