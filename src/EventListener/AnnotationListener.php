@@ -3,70 +3,55 @@
 
 namespace verzeilberg\UploadImagesBundle\EventListener;
 
-use Doctrine\Common\EventArgs;
+use verzeilberg\UploadImagesBundle\Mapping\Annotation\UploadField;
+use Doctrine\Common\EventSubscriber;
+use Doctrine\ORM\Events;
+use Doctrine\Persistence\Event\LifecycleEventArgs;
 
-/**
- * UploadListener.
- *
- * Handles file uploads.
- *
- * @author
- */
-class AnnotationListener extends BaseListener
+class DatabaseActivitySubscriber implements EventSubscriber
 {
-    /**
-     * The events the listener is subscribed to.
-     *
-     * @return array The array of events
-     */
-    public function getSubscribedEvents(): array
+    // this method can only return the event names; you cannot define a
+    // custom method name to execute when each event triggers
+    public function getSubscribedEvents()
     {
         return [
-            'prePersist',
-            'preUpdate',
+            Events::postPersist,
+            //Events::postRemove,
+            Events::postUpdate,
         ];
     }
 
-    /**
-     * @param EventArgs $event The event
-     *
-     * @throws \Vich\UploaderBundle\Exception\MappingNotFoundException
-     */
-    public function prePersist(EventArgs $event): void
+    // callback methods must be called exactly like the events they listen to;
+    // they receive an argument of type LifecycleEventArgs, which gives you access
+    // to both the entity object of the event and the entity manager itself
+    public function postPersist(LifecycleEventArgs $args)
     {
-
-        die('test');
-
-        $object = $this->adapter->getObjectFromArgs($event);
-
-        if (!$this->isUploadable($object)) {
-            return;
-        }
-
-        foreach ($this->getUploadableFields($object) as $field) {
-            $this->handler->upload($object, $field);
-        }
+        $this->logActivity('persist', $args);
     }
 
-    /**
-     * @param EventArgs $event The event
-     *
-     * @throws \Vich\UploaderBundle\Exception\MappingNotFoundException
-     */
-    public function preUpdate(EventArgs $event): void
+    public function postRemove(LifecycleEventArgs $args)
     {
-        die('test2');
+        $this->logActivity('remove', $args);
+    }
 
-        $object = $this->adapter->getObjectFromArgs($event);
+    public function postUpdate(LifecycleEventArgs $args)
+    {
+        $this->logActivity('update', $args);
+    }
 
-        if (!$this->isUploadable($object)) {
+    private function logActivity(string $action, LifecycleEventArgs $args)
+    {
+
+        die('fdfd');
+
+        $entity = $args->getObject();
+
+        // if this subscriber only applies to certain entity types,
+        // add some code to check the entity type as early as possible
+        if (!$entity instanceof UploadField) {
             return;
         }
 
-        foreach ($this->getUploadableFields($object) as $field) {
-            $this->handler->upload($object, $field);
-        }
-
-        $this->adapter->recomputeChangeSet($event);
+        // ... get the entity information and log it somehow
     }
 }
