@@ -42,7 +42,7 @@ class AnnotationListener implements EventSubscriber
     private function logActivity(string $action, LifecycleEventArgs $args)
     {
 
-        die('fdfd');
+
 
         $entity = $args->getObject();
 
@@ -51,6 +51,8 @@ class AnnotationListener implements EventSubscriber
         if (!$entity instanceof UploadField) {
             return;
         }
+
+        die('fdfd');
 
         // ... get the entity information and log it somehow
     }
