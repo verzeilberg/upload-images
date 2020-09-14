@@ -16,7 +16,7 @@ class AnnotationListener implements EventSubscriber
     {
         return [
             Events::postPersist,
-            //Events::postRemove,
+            Events::postRemove,
             Events::postUpdate,
         ];
     }
@@ -45,6 +45,8 @@ class AnnotationListener implements EventSubscriber
 
 
         $entity = $args->getObject();
+
+        var_dump($entity);
 
         // if this subscriber only applies to certain entity types,
         // add some code to check the entity type as early as possible
