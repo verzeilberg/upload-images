@@ -8,7 +8,8 @@ use Serializable;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass="Verzeilberg\UploadImagesBundle\Repository\ImageRepository")
+ * @ORM\Entity(repositoryClass="verzeilberg\UploadImagesBundle\Repository\ImageRepository")
+ * @ORM\EntityListeners({"verzeilberg\UploadImagesBundle\EventListenerImageListener"})
  * @ORM\Table(name="image",uniqueConstraints={@ORM\UniqueConstraint(name="search_idx", columns={"name_image"})})
  */
 class Image implements Serializable
