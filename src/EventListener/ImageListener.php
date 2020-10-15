@@ -9,7 +9,6 @@ use verzeilberg\UploadImagesBundle\Entity\Image;
 class ImageListener
 {
 
-    /** @PrePersist */
     public function prePersistHandler(
         Image $image,
         LifecycleEventArgs $event
