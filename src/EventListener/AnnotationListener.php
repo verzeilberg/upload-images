@@ -46,15 +46,11 @@ class AnnotationListener implements EventSubscriber
 
         $entity = $args->getObject();
 
-        var_dump($entity);
-
         // if this subscriber only applies to certain entity types,
         // add some code to check the entity type as early as possible
         if (!$entity instanceof UploadField) {
             return;
         }
-
-        die('fdfd');
 
         // ... get the entity information and log it somehow
     }
