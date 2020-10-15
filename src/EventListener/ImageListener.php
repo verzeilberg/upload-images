@@ -31,6 +31,8 @@ class ImageListener
     /** @ORM\PreUpdate */
     public function preUpdateHandler(Image $image, PreUpdateEventArgs $event)
     {
+
+        var_dump($image);
         die('You shall not sdadasdasdpass');
     }
 
