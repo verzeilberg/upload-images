@@ -6,7 +6,7 @@ services:
 
   verzeilberg\UploadImagesBundle\Service\Rotate:
 
-    verzeilberg\UploadImagesBundle\Service\Image:
+  verzeilberg\UploadImagesBundle\Service\Image:
 
   verzeilberg\UploadImagesBundle\Metadata\Reader\ImageAnnotationReader:
 
