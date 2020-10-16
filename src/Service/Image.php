@@ -5,7 +5,7 @@ namespace verzeilberg\UploadImagesBundle\Service;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use verzeilberg\UploadImagesBundle\Metadata\Reader\Annotation;
 
-class Upload
+class Image
 {
 
     private $params;
@@ -13,6 +13,9 @@ class Upload
     public function __construct(ParameterBagInterface $params)
     {
         $this->params = $params;
+
+        var_dump($params); die;
+
     }
 
     public function Upload($class)
