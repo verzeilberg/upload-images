@@ -11,6 +11,9 @@ services:
   upload_images.rotate:
     class: verzeilberg\UploadImagesBundle\Service\Rotate
 
+  upload_images.image:
+    class: verzeilberg\UploadImagesBundle\Service\Image
+
   verzeilberg\UploadImagesBundle\EventListener\AnnotationListener:
     tags:
       - { name: 'doctrine.event_subscriber' }
