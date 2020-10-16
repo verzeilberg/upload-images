@@ -6,13 +6,12 @@ services:
 
   verzeilberg\UploadImagesBundle\Service\Rotate:
 
+    verzeilberg\UploadImagesBundle\Service\Image:
+
   verzeilberg\UploadImagesBundle\Metadata\Reader\ImageAnnotationReader:
 
   upload_images.rotate:
     class: verzeilberg\UploadImagesBundle\Service\Rotate
-
-  upload_images.image:
-    class: verzeilberg\UploadImagesBundle\Service\Image
 
   verzeilberg\UploadImagesBundle\EventListener\AnnotationListener:
     tags:

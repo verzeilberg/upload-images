@@ -20,8 +20,6 @@ class UploadImagesExtension extends Extension
         $loader->load('services.yaml');
 
         $definition = $container->getDefinition('upload_images.rotate');
-        $definition = $container->getDefinition('upload_images.image');
-        
         $definition->setArgument(0, $config['upload_folder']);
         $definition->setArgument(1, $config['max_file_size']);
     }
