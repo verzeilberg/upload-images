@@ -28,15 +28,20 @@ class ImageListener
         LifecycleEventArgs $event
     )
     {
-        var_dump($image);
-        die('You shall not pass');
+        $this->imageService->setImage($image);
+        $result = $this->imageService->check();
+        if ($result)
+        {
+            $destinationFolder = $this->imageService->createDestinationFolder('origininal');
+            $this->imageService->uploadImage($destinationFolder);
+        }
     }
 
     /** @ORM\PreUpdate */
     public function preUpdateHandler(Image $image, PreUpdateEventArgs $event)
     {
 
-        var_dump($image);
+        var_dump($image->getImageFile());
         die('You shall not sdadasdasdpass');
     }
 

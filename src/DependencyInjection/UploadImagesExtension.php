@@ -14,13 +14,25 @@ class UploadImagesExtension extends Extension
     public function load(array $configs, ContainerBuilder $container)
     {
         $config = $this->processConfiguration(new Configuration(), $configs);
-        $container->setParameter('upload_images.upload_folder', $config['upload_folder']);
-        $container->setParameter('upload_images.max_file_size', $config['max_file_size']);
+        $imageSettings = [];
+        foreach ($config["mappings"] as $index => $mapping) {
+            $imageSettings[$index]['upload_folder'] = $mapping['upload_folder'];
+            $imageSettings[$index]['max_file_size'] = $mapping['max_file_size'];
+            $imageSettings[$index]['allowed_file_types'] = $mapping['allowed_file_types'];
+            foreach  ($mapping["image_types"] as $imageTypeIndex => $imageType)
+            {
+                $imageSettings[$index]['image_types'][$imageTypeIndex]['folder'] = $imageType['folder'];
+                $imageSettings[$index]['image_types'][$imageTypeIndex]['type_crop'] = $imageType['type_crop'];
+
+                if(isset($imageType['ratio'])) {
+                    $imageSettings[$index]['image_types'][$imageTypeIndex]['ratio']['width'] = $imageType['ratio']["width"];
+                    $imageSettings[$index]['image_types'][$imageTypeIndex]['ratio']['height'] = $imageType['ratio']["width"];
+                }
+            }
+        }
+        $container->setParameter('upload_images',  $imageSettings);
         $loader = new YamlFileLoader($container, new FileLocator(dirname(__DIR__).'/Resources'));
         $loader->load('services.yaml');
 
-        $definition = $container->getDefinition('upload_images.rotate');
-        $definition->setArgument(0, $config['upload_folder']);
-        $definition->setArgument(1, $config['max_file_size']);
     }
 }

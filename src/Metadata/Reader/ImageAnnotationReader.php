@@ -26,12 +26,7 @@ class ImageAnnotationReader
             if (null === $uploadField) {
                 continue;
             }
-            var_dump($uploadField->mapping);
         }
-
-die;
-
-
     }
 
 }

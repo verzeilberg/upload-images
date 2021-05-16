@@ -23,11 +23,6 @@ class Image implements Serializable
 
     /**
      * @ORM\Column(type="string", length=255)
-     */
-    private $imageFile;
-
-    /**
-     * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
      */
     protected $nameImage;
@@ -157,23 +152,6 @@ class Image implements Serializable
     {
         $this->imageTypes = $imageTypes;
     }
-
-    /**
-     * @return mixed
-     */
-    public function getImageFile()
-    {
-        return $this->imageFile;
-    }
-
-    /**
-     * @param mixed $imageFile
-     */
-    public function setImageFile($imageFile): void
-    {
-        $this->imageFile = $imageFile;
-    }
-
 
     public function serialize()
     {
