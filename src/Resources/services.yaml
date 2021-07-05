@@ -23,3 +23,5 @@ services:
       - { name: doctrine.orm.entity_listener, event: postPersist }
       # Or, optionally, you can give the entity manager name as below
       #- { name: doctrine.orm.entity_listener, entity_manager: custom }
+
+  verzeilberg\UploadImagesBundle\Repository\ImageTypeRepository:

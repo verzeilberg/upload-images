@@ -6,8 +6,8 @@ namespace verzeilberg\UploadImagesBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="Verzeilberg\UploadImagesBundle\Repository\ImageTypeRepository")
- * @ORM\Table(name="image_type",uniqueConstraints={@ORM\UniqueConstraint(name="search_idx", columns={"file_name"})})
+ * @ORM\Entity(repositoryClass="verzeilberg\UploadImagesBundle\Repository\ImageTypeRepository")
+ * @ORM\Table(name="image_type",uniqueConstraints={@ORM\UniqueConstraint(name="search_idx", columns={"id"})})
  */
 class ImageType
 {
@@ -21,7 +21,7 @@ class ImageType
     /**
      * @ORM\Column(type="string", length=255, nullable=false)
      */
-    protected $fileName;
+    protected $type;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=false)
@@ -37,11 +37,6 @@ class ImageType
      * @ORM\Column(type="integer", length=11, nullable=true)
      */
     protected $height;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=false)
-     */
-    protected $imageTypeName;
 
     /**
      * @ORM\Column(name="is_crop", type="integer", length=1, nullable=false, options={"default"=0})
@@ -72,17 +67,17 @@ class ImageType
     /**
      * @return mixed
      */
-    public function getFileName()
+    public function getType()
     {
-        return $this->fileName;
+        return $this->type;
     }
 
     /**
-     * @param mixed $fileName
+     * @param mixed $type
      */
-    public function setFileName($fileName): void
+    public function setType($type): void
     {
-        $this->fileName = $fileName;
+        $this->type = $type;
     }
 
     /**
@@ -131,22 +126,6 @@ class ImageType
     public function setHeight($height): void
     {
         $this->height = $height;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getImageTypeName()
-    {
-        return $this->imageTypeName;
-    }
-
-    /**
-     * @param mixed $imageTypeName
-     */
-    public function setImageTypeName($imageTypeName): void
-    {
-        $this->imageTypeName = $imageTypeName;
     }
 
     /**

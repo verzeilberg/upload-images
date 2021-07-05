@@ -4,28 +4,47 @@ namespace verzeilberg\UploadImagesBundle\Service;
 
 use Gedmo\Sluggable\Util\Urlizer;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use verzeilberg\UploadImagesBundle\Entity\ImageType;
 use verzeilberg\UploadImagesBundle\Exceptions\ImageException;
 use verzeilberg\UploadImagesBundle\Metadata\Reader\Annotation;
 use verzeilberg\UploadImagesBundle\Entity\Image as ImageObject;
+use verzeilberg\UploadImagesBundle\Repository\ImageTypeRepository;
 
 class Image
 {
+    /** @var ImageTypeRepository  */
+    private $imageTypeRepository;
     /** @var ParameterBagInterface */
     private $params;
     /** @var mixed  */
-    private $imageFile;
+    private $image;
+    /** @var int */
     private $imageWidth;
+    /** @var int */
     private $imageHeight;
+    /** @var string */
     private $imageMimeType;
+    /** @var int */
     private $imageSize;
+    /** @var string */
     private $imageType;
+    /** @var string */
+    private $fileName;
+    /** @var string */
+    private $destination;
 
-
+    /**
+     * Image constructor.
+     * @param ParameterBagInterface $params
+     * @param ImageTypeRepository $imageTypeRepository
+     */
     public function __construct(
-        ParameterBagInterface $params
+        ParameterBagInterface $params,
+        ImageTypeRepository $imageTypeRepository
     )
     {
-        $this->params       = $params->get("upload_images");
+        $this->params               = $params->get("upload_images");
+        $this->imageTypeRepository  = $imageTypeRepository;
     }
 
     /**
@@ -33,12 +52,11 @@ class Image
      */
     private function setImageProperties()
     {
-        list(
-            $this->imageWidth,
-            $this->imageHeight,
-            ) = getimagesize($this->imageFile->getPathname());
-        $this->imageMimeType    = $this->imageFile->getMimeType();
-        $this->imageSize        = $this->imageFile->getSize();
+        $imageDetails           = $this->getImageDetails();
+        $this->imageWidth       = $imageDetails[0];
+        $this->imageHeight      = $imageDetails[1];
+        $this->imageMimeType    = $this->image->getImageFile()->getMimeType();
+        $this->imageSize        = $this->image->getImageFile()->getSize();
         $this->imageType        = 'default';
     }
 
@@ -48,7 +66,7 @@ class Image
      */
     public function setImage($image)
     {
-        $this->imageFile    = $image->getImageFile();
+        $this->image    = $image;
         $this->setImageProperties();
     }
 
@@ -100,20 +118,99 @@ class Image
     }
 
     /**
+     * Create file name for image
+     * @return string
+     */
+    public function createFileName(): string
+    {
+        $fileName = $this->image->getNameImage();
+        if (isset($fileName))
+        {
+            $fileName = Urlizer::urlize($fileName).'-'.uniqid().'.'.$this->image->getImageFile()->guessExtension();
+        } else {
+            $originalFilename = pathinfo($this->image->getImageFile()->getClientOriginalName(), PATHINFO_FILENAME);
+            $fileName = Urlizer::urlize($originalFilename).'-'.uniqid().'.'.$this->image->getImageFile()->guessExtension();
+        }
+
+        $this->fileName = $fileName;
+        return $fileName;
+    }
+
+    /**
      * @param $destination
      * @param null $fileName
      */
-    public function uploadImage($destination, $fileName = null)
+    public function uploadImage($destination, $fileName)
     {
-        if (isset($fileName))
-        {
-            $fileName = Urlizer::urlize($fileName).'-'.uniqid().'.'.$this->imageFile->guessExtension();
-        } else {
-            $originalFilename = pathinfo($this->imageFile->getClientOriginalName(), PATHINFO_FILENAME);
-            $fileName = Urlizer::urlize($originalFilename).'-'.uniqid().'.'.$this->imageFile->guessExtension();
-        }
-        $this->imageFile->move($destination, $fileName);
+        $this->destination = $destination;
+        $this->image->setNameImage($fileName);
+        $this->image->getImageFile()->move($destination, $fileName);
     }
 
-    
+
+    public function createImageType(
+        $type = 'original',
+        $crop = 0,
+        $original = 1
+    )
+    {
+        $imageType = new ImageType();
+        $imageType->setFolder($this->destination);
+        $imageType->setHeight($this->imageHeight);
+        $imageType->setWidth($this->imageWidth);
+        $imageType->setIsCrop($crop);
+        $imageType->setIsOriginal($original);
+        $imageType->setType($type);
+        $this->imageTypeRepository->save($imageType);
+
+        return $imageType;
+    }
+
+    /**
+     * @return array
+     */
+    public function processImageTypes()
+    {
+        $imageTypes = [];
+        foreach ($this->params[$this->imageType]['image_types'] as $type => $imageType)
+        {
+            switch ($imageType['type_crop']) {
+                case 'auto':
+                    $this->
+                    $imageType = $this->createImageType($imageType[$type], 1, 0);
+                    $imageTypes[] = $imageType;
+                    break;
+                case 'manual':
+                    echo "i equals 1";
+                    break;
+                case 'none':
+                    $this->saveImageIntoFolder($imageType['folder']);
+                    $imageType = $this->createImageType($imageType[$type], 0, 0);
+                    $imageTypes[] = $imageType;
+                    break;
+            }
+        }
+
+        return $imageTypes;
+
+    }
+
+    /**
+     * Get image details
+     * @return array|false
+     */
+    private function getImageDetails()
+    {
+        return getimagesize($this->image->getImageFile()->getPathname());
+    }
+
+    /**
+     * @param $subfolder
+     */
+    private function saveImageIntoFolder($subfolder)
+    {
+        $destinationFolder = $this->createDestinationFolder($subfolder);
+        $fileName = $this->createFileName();
+        $this->uploadImage($destinationFolder, $fileName);
+    }
 }
