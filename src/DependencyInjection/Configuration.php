@@ -31,7 +31,7 @@ class Configuration implements ConfigurationInterface
                                 ->arrayPrototype()
                                     ->children()
                                         ->scalarNode('folder')
-                                            ->defaultValue('original')
+                                            ->cannotBeEmpty()
                                         ->end()
                                         ->enumNode('type_crop')
                                             ->values(['manual', 'auto', 'none'])

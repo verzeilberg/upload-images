@@ -49,6 +49,13 @@ class ImageType
     protected $isOriginal = 0;
 
     /**
+     * Many imageTypes have one image. This is the owning side.
+     * @ORM\ManyToOne(targetEntity="Image", inversedBy="imageTypes")
+     * @ORM\JoinColumn(name="image_id", referencedColumnName="id")
+     */
+    private $image;
+
+    /**
      * @return mixed
      */
     public function getId()
@@ -159,6 +166,24 @@ class ImageType
     {
         $this->isOriginal = $isOriginal;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    /**
+     * @param mixed $image
+     */
+    public function setImage($image): void
+    {
+        $this->image = $image;
+    }
+
+
 
 
 }

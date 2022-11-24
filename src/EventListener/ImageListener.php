@@ -15,7 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
 class ImageListener
 {
     /** @var ImageService  */
-    protected $imageService;
+    protected ImageService $imageService;
 
     public function __construct(
         ImageService $imageService
@@ -25,18 +25,30 @@ class ImageListener
     }
 
     /** @ORM\PrePersist */
-    public function prePersistHandler(
-        Image $image,
-        LifecycleEventArgs $event
-    )
+    public function prePersistHandler(Image $image, LifecycleEventArgs $event)
     {
         $this->processImageBeforeSave($image);
     }
 
+    /** @ORM\PostPersist */
+    public function postPersistHandler(Image $image, LifecycleEventArgs $event)
+    {
+        $imageType = $this->imageService->createImageType($image);
+        $this->imageService->processImageTypes($imageType->getFolder(), $image->getNameImage());
+    }
+
+
     /** @ORM\PreUpdate */
     public function preUpdateHandler(Image $image, PreUpdateEventArgs $event)
     {
-        $this->processImageBeforeSave($image);
+
+    }
+
+
+    /** @ORM\PostUpdate */
+    public function postUpdateHandler(Image $image, LifecycleEventArgs $event)
+    {
+
     }
 
     /**
@@ -53,11 +65,6 @@ class ImageListener
             $fileName = $this->imageService->createFileName();
             $this->imageService->uploadImage($destinationFolder, $fileName);
             $image->setNameImage($fileName);
-            $imageType = $this->imageService->createImageType();
-            $image->addImageType($imageType);
-
-            $this->imageService->processImageTypes();
-
         }
     }
 

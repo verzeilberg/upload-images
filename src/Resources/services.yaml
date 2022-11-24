@@ -4,9 +4,16 @@ services:
     autowire: true      # Automatically injects dependencies in your services.
     autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
+
+  verzeilberg\UploadImagesBundle\Controller\:
+    resource: '../Controller/'
+    tags: ['controller.service_arguments', $returnController]
+
   verzeilberg\UploadImagesBundle\Service\Rotate:
 
   verzeilberg\UploadImagesBundle\Service\Image:
+    arguments:
+      $projectDir: '%kernel.project_dir%/public'
 
   verzeilberg\UploadImagesBundle\Metadata\Reader\ImageAnnotationReader:
 
@@ -24,4 +31,8 @@ services:
       # Or, optionally, you can give the entity manager name as below
       #- { name: doctrine.orm.entity_listener, entity_manager: custom }
 
+  verzeilberg\UploadImagesBundle\Repository\ImageRepository:
+
   verzeilberg\UploadImagesBundle\Repository\ImageTypeRepository:
+
+  verzeilberg\UploadImagesBundle\Service\Crop:

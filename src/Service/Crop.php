@@ -14,10 +14,8 @@ class Crop
      * @param null $imageObject
      * @return string
      */
-    public function resizeAndCropImage($sOriLocation = null, $sDestinationFolder = null, $iImgWidth = null, $iImgHeight = null, $imageType = 'original', $imageObject = null)
+    public function resizeAndCropImage($sOriLocation = null, $sDestinationFolder = null, $iImgWidth = null, $iImgHeight = null)
     {
-
-
         $sPathParts = pathinfo($sOriLocation);
         $sFileName = $sPathParts['basename'];
         $sMimeType = mime_content_type($sOriLocation);
@@ -74,10 +72,11 @@ class Crop
             }
         }
 
-        // Resize and crop
+        // Resize and Crop
         imagecopyresampled($oTempImage, $oSourceImage, 0 - ($new_width - $iImgWidth) / 2, 0 - ($new_height - $iImgHeight) / 2, 0, 0, $new_width, $new_height, $iWidth, $iHeight);
 
         $sPathToFile = $sDestinationFolder . '/' . $sFileName;
+
 
         //Check MimeType to create image
         if ($sMimeType == "image/jpeg") {

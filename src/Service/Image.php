@@ -9,14 +9,22 @@ use verzeilberg\UploadImagesBundle\Exceptions\ImageException;
 use verzeilberg\UploadImagesBundle\Metadata\Reader\Annotation;
 use verzeilberg\UploadImagesBundle\Entity\Image as ImageObject;
 use verzeilberg\UploadImagesBundle\Repository\ImageTypeRepository;
+use verzeilberg\UploadImagesBundle\Repository\ImageRepository;
+use verzeilberg\UploadImagesBundle\Service\Crop;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class Image
 {
-    /** @var ImageTypeRepository  */
+
+    /** @var ImageRepository */
+    private $imageRepository;
+    /** @var ImageTypeRepository */
     private $imageTypeRepository;
+    /** @var Crop */
+    private $cropService;
     /** @var ParameterBagInterface */
     private $params;
-    /** @var mixed  */
+    /** @var mixed */
     private $image;
     /** @var int */
     private $imageWidth;
@@ -32,6 +40,10 @@ class Image
     private $fileName;
     /** @var string */
     private $destination;
+    /** @var string */
+    private $projectDir;
+    /** @var object */
+    private $session;
 
     /**
      * Image constructor.
@@ -40,11 +52,19 @@ class Image
      */
     public function __construct(
         ParameterBagInterface $params,
-        ImageTypeRepository $imageTypeRepository
+        ImageRepository $imageRepository,
+        ImageTypeRepository $imageTypeRepository,
+        Crop $cropService,
+        string $projectDir,
+        SessionInterface $session
     )
     {
-        $this->params               = $params->get("upload_images");
-        $this->imageTypeRepository  = $imageTypeRepository;
+        $this->params = $params->get("upload_images");
+        $this->imageRepository = $imageRepository;
+        $this->imageTypeRepository = $imageTypeRepository;
+        $this->cropService = $cropService;
+        $this->projectDir = $projectDir;
+        $this->session = $session;
     }
 
     /**
@@ -52,12 +72,12 @@ class Image
      */
     private function setImageProperties()
     {
-        $imageDetails           = $this->getImageDetails();
-        $this->imageWidth       = $imageDetails[0];
-        $this->imageHeight      = $imageDetails[1];
-        $this->imageMimeType    = $this->image->getImageFile()->getMimeType();
-        $this->imageSize        = $this->image->getImageFile()->getSize();
-        $this->imageType        = 'default';
+        list($height, $width) = getimagesize($this->image->getImageFile()->getPathName());
+        $this->imageWidth = $width;
+        $this->imageHeight = $height;
+        $this->imageMimeType = $this->image->getImageFile()->getMimeType();
+        $this->imageSize = $this->image->getImageFile()->getSize();
+        $this->imageType = 'default';
     }
 
     /**
@@ -66,7 +86,7 @@ class Image
      */
     public function setImage($image)
     {
-        $this->image    = $image;
+        $this->image = $image;
         $this->setImageProperties();
     }
 
@@ -76,22 +96,17 @@ class Image
      */
     public function check(): bool
     {
-        if ($this->imageSize > $this->params[$this->imageType]['max_file_size'])
-        {
+        if ($this->imageSize > $this->params[$this->imageType]['max_file_size']) {
             $message = 'File size exceeded max file size';
-        } else if (!in_array($this->imageMimeType, $this->params[$this->imageType]['allowed_file_types']))
-        {
+        } else if (!in_array($this->imageMimeType, $this->params[$this->imageType]['allowed_file_types'])) {
             $message = 'File mime type not allowed';
         } else {
-            foreach ($this->params[$this->imageType]['image_types'] as $type => $imageType)
-            {
+            foreach ($this->params[$this->imageType]['image_types'] as $type => $imageType) {
                 if (isset($imageType['ratio'])) {
-                    if ($imageType['ratio']['width'] > $this->imageWidth)
-                    {
-                        $message = 'File width is to small to create a crop';
-                    } else if ($imageType['ratio']['height'] > $this->imageHeight)
-                    {
-                        $message = 'File height is to small to create a crop';
+                    if ($imageType['ratio']['width'] > $this->imageWidth) {
+                        $message = 'File width is to small to create a Crop';
+                    } else if ($imageType['ratio']['height'] > $this->imageHeight) {
+                        $message = 'File height is to small to create a Crop';
                     }
                 }
             }
@@ -105,10 +120,10 @@ class Image
     /**
      * Create folder, if not exist, and give appropriate rights
      */
-    public function createDestinationFolder($subFolder = null)
+    public function createDestinationFolder($subFolder = null): string
     {
         // Set destination folder
-        $destinationFolder = $this->params[$this->imageType]['upload_folder'] . (isset($subFolder)? $subFolder . '/': null);
+        $destinationFolder = $this->projectDir . $this->params[$this->imageType]['upload_folder'] . (isset($subFolder) ? $subFolder . '/' : null);
         if (!file_exists($destinationFolder)) {
             mkdir($destinationFolder, 0777, true);
         } elseif (!is_writable($destinationFolder)) {
@@ -124,12 +139,12 @@ class Image
     public function createFileName(): string
     {
         $fileName = $this->image->getNameImage();
-        if (isset($fileName))
-        {
-            $fileName = Urlizer::urlize($fileName).'-'.uniqid().'.'.$this->image->getImageFile()->guessExtension();
+        if (isset($fileName)) {
+            $extension = $this->image->getImageFile()->guessExtension();
+            $fileName = Urlizer::urlize($fileName) . '-' . uniqid() . '.' . $extension;
         } else {
             $originalFilename = pathinfo($this->image->getImageFile()->getClientOriginalName(), PATHINFO_FILENAME);
-            $fileName = Urlizer::urlize($originalFilename).'-'.uniqid().'.'.$this->image->getImageFile()->guessExtension();
+            $fileName = Urlizer::urlize($originalFilename) . '-' . uniqid() . '.' . $this->image->getImageFile()->guessExtension();
         }
 
         $this->fileName = $fileName;
@@ -144,23 +159,30 @@ class Image
     {
         $this->destination = $destination;
         $this->image->setNameImage($fileName);
-        $this->image->getImageFile()->move($destination, $fileName);
+        copy($this->image->getImageFile()->getPathName(), $destination . $fileName);
     }
 
 
     public function createImageType(
+        $image,
         $type = 'original',
+        $folder = 'original',
         $crop = 0,
         $original = 1
+
     )
     {
+        $destination = $this->createDestinationFolder($folder);
+        $destination = str_replace($this->projectDir, '', $destination);
+
         $imageType = new ImageType();
-        $imageType->setFolder($this->destination);
+        $imageType->setFolder($destination);
         $imageType->setHeight($this->imageHeight);
         $imageType->setWidth($this->imageWidth);
         $imageType->setIsCrop($crop);
         $imageType->setIsOriginal($original);
         $imageType->setType($type);
+        $imageType->setImage($image);
         $this->imageTypeRepository->save($imageType);
 
         return $imageType;
@@ -169,30 +191,40 @@ class Image
     /**
      * @return array
      */
-    public function processImageTypes()
+    public function processImageTypes($folder, $imageName)
     {
         $imageTypes = [];
-        foreach ($this->params[$this->imageType]['image_types'] as $type => $imageType)
-        {
+        foreach ($this->params[$this->imageType]['image_types'] as $type => $imageType) {
             switch ($imageType['type_crop']) {
                 case 'auto':
-                    $this->
-                    $imageType = $this->createImageType($imageType[$type], 1, 0);
+                    $this->cropService->resizeAndCropImage(
+                        $this->projectDir . $folder . $imageName,
+                        $this->projectDir . '/uploads/images/' . $type . '/' . $imageType['folder'],
+                        $imageType['ratio']['width'],
+                        $imageType['ratio']['height']
+                    );
+                    $imageType = $this->createImageType($this->image, $type, $imageType['folder'], 1, 0);
                     $imageTypes[] = $imageType;
                     break;
                 case 'manual':
-                    echo "i equals 1";
+                    $this->saveImageIntoSession(
+                        $type,
+                        $this->projectDir . $folder . $imageName,
+                        $this->projectDir . '/uploads/images/' . $type . '/' . $imageType['folder'],
+                        $imageType['ratio']['width'],
+                        $imageType['ratio']['height']
+                        );
+                    $imageType = $this->createImageType($this->image, $type, $imageType['folder'], 1, 0);
+                    $imageTypes[] = $imageType;
                     break;
                 case 'none':
-                    $this->saveImageIntoFolder($imageType['folder']);
-                    $imageType = $this->createImageType($imageType[$type], 0, 0);
+                    $this->saveImageIntoFolder($imageType['folder'], $imageName);
+                    $imageType = $this->createImageType($this->image, $type, $imageType['folder'], 0, 0);
                     $imageTypes[] = $imageType;
                     break;
             }
         }
-
         return $imageTypes;
-
     }
 
     /**
@@ -201,16 +233,120 @@ class Image
      */
     private function getImageDetails()
     {
-        return getimagesize($this->image->getImageFile()->getPathname());
+        list($height, $width) = getimagesize($this->image->getImageFile()->getPathName());
+        return [$height, $width];
+
     }
 
     /**
-     * @param $subfolder
+     * @param $image
+     * @return array
      */
-    private function saveImageIntoFolder($subfolder)
+    public function saveImage($image): array
     {
-        $destinationFolder = $this->createDestinationFolder($subfolder);
-        $fileName = $this->createFileName();
+        return $this->imageRepository->save($image);
+    }
+
+    /**
+     * @param $subFolder
+     * @param null $fileName
+     */
+    private function saveImageIntoFolder($subFolder, $fileName = null)
+    {
+        $destinationFolder = $this->createDestinationFolder($subFolder);
+        if (!isset($fileName)) {
+            $fileName = $this->createFileName();
+        }
         $this->uploadImage($destinationFolder, $fileName);
+    }
+
+    /**
+     * @param $type
+     * @param $sOriLocation
+     * @param $sDestinationFolder
+     * @param $iImgWidth
+     * @param $iImgHeight
+     * @return void
+     */
+    private function saveImageIntoSession(
+        $type,
+        $sOriLocation = null,
+        $sDestinationFolder = null,
+        $iImgWidth = null,
+        $iImgHeight = null
+    )
+    {
+
+        $image = [
+            'oriLocation'           => $sOriLocation,
+            'destinationLocation'   => $sDestinationFolder,
+            'width'                 => $iImgWidth,
+            'height'                => $iImgHeight
+        ];
+
+        $manualImages = [];
+        if($this->checkImageInSession()) {
+            $manualImages = $this->session->get('manual_images');
+            $manualImages[$type] = $image;
+        } else {
+            $manualImages[$type] = $image;
+        }
+
+        $this->session->set('manual_images', $manualImages);
+    }
+
+    /**
+     * @return bool
+     */
+    public function checkImageInSession(): bool
+    {
+        if ($this->session->has('manual_images'))
+        {
+            return true;
+        };
+
+        return false;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getImagesFromSession()
+    {
+        if ($this->checkImageInSession())
+        {
+            return $this->session->get('manual_images');
+        } else {
+            throw new ImageException('No images in session!');
+        }
+    }
+
+    /**
+     * Delete file from server
+     * @param $fileName
+     * @return bool
+     */
+    private function removeImageFromServer($fileName)
+    {
+        return @unlink($fileName);
+    }
+
+    /**
+     * @param $id
+     * @return void
+     */
+    public function deleteImage($id)
+    {
+        $image = $this->imageRepository->find($id);
+        $result = false;
+        foreach ($image->getImageTypes() as $imageType) {
+            $result = $this->removeImageFromServer($this->projectDir . $imageType->getFolder() . $image->getNameImage());
+            $this->imageTypeRepository->delete($imageType);
+        }
+
+        if ($result === true) {
+            $this->imageRepository->delete($image);
+        }
+
     }
 }

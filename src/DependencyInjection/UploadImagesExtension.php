@@ -26,7 +26,7 @@ class UploadImagesExtension extends Extension
 
                 if(isset($imageType['ratio'])) {
                     $imageSettings[$index]['image_types'][$imageTypeIndex]['ratio']['width'] = $imageType['ratio']["width"];
-                    $imageSettings[$index]['image_types'][$imageTypeIndex]['ratio']['height'] = $imageType['ratio']["width"];
+                    $imageSettings[$index]['image_types'][$imageTypeIndex]['ratio']['height'] = $imageType['ratio']["height"];
                 }
             }
         }

@@ -4,6 +4,8 @@ namespace verzeilberg\UploadImagesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Serializable;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -46,14 +48,10 @@ class Image implements Serializable
     protected $sortOrder = 0;
 
     /**
-     * Many images have Many imageTypes.
-     * @ORM\ManyToMany(targetEntity="ImageType")
-     * @ORM\JoinTable(name="image_imagetypes",
-     *      joinColumns={@ORM\JoinColumn(name="id", referencedColumnName="id", onDelete="CASCADE")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="imageTypeId", referencedColumnName="id", onDelete="CASCADE", unique=true)}
-     *      )
+     * One Image has many imageTypes. This is the inverse side.
+     * @ORM\OneToMany(targetEntity="ImageType", mappedBy="image", cascade={"persist", "remove"})
      */
-    private $imageTypes;
+    private Collection $imageTypes;
 
     public function __construct() {
         $this->imageTypes = new ArrayCollection();
@@ -141,17 +139,17 @@ class Image implements Serializable
     }
 
     /**
-     * @return ArrayCollection
+     * @return Collection
      */
-    public function getImageTypes(): ArrayCollection
+    public function getImageTypes(): Collection
     {
         return $this->imageTypes;
     }
 
     /**
-     * @param ArrayCollection $imageTypes
+     * @param Collection $imageTypes
      */
-    public function setImageTypes(ArrayCollection $imageTypes): void
+    public function setImageTypes(Collection $imageTypes): Collection
     {
         $this->imageTypes = $imageTypes;
     }
@@ -203,5 +201,17 @@ class Image implements Serializable
         list (
             $this->id,
             ) = unserialize($serialized);
+    }
+
+    public function getImageLocationByType($type = 'original')
+    {
+        $imageType = $this->getImageByType();
+        return $imageType->getFolder() . $this->getNameImage();
+    }
+
+    public function getImageByType($type = 'original')
+    {
+        $criteria = Criteria::create()->where(Criteria::expr()->eq("type", $type));
+        return $this->getImageTypes()->matching($criteria)->first();
     }
 }
