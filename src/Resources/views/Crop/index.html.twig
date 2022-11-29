@@ -1,11 +1,43 @@
 {% extends '/layout.html.twig' %}
-
+{% block javascripts %}
+    <link rel="stylesheet" href="{{ asset('bundles/uploadimages/css/cropperjs/cropper.min.css') }}">
+    <script src="{{ asset('bundles/uploadimages/js//jquery.min.js') }}"></script>
+    <script src="{{ asset('bundles/uploadimages/js/cropperjs/cropper.min.js') }}"></script>
+    <style>
+        .cropBox
+        {
+            max-height:600px;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            const image = document.getElementById('avatar');
+            const cropper = new Cropper(image, {
+                aspectRatio: 16 / 9,
+                viewMode: 2,
+                zoomOnWheel: false,
+                crop(event) {
+                    $('input#crop_detailX').val(event.detail.x);
+                    $('input#crop_detailY').val(event.detail.x);
+                    $('input#crop_detailW').val(event.detail.width);
+                    $('input#crop_detailH').val(event.detail.height);s
+                },
+            });
+        });
+    </script>
+{% endblock %}
 
 
 {% block content %}
     <div class="row">
-        <div class="col cropContent">
+        <div class="col cropBox" >
+            <img id="avatar" src="{{ sImageToBeCropped }}">
+        </div>
+    </div>
 
+    <div class="row">
+        <div class="col-md-4">
+            {{ form(form) }}
         </div>
     </div>
 {% endblock %}

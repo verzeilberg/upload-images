@@ -209,8 +209,8 @@ class Image
                 case 'manual':
                     $this->saveImageIntoSession(
                         $type,
-                        $this->projectDir . $folder . $imageName,
-                        $this->projectDir . '/uploads/images/' . $type . '/' . $imageType['folder'],
+                        $folder . $imageName,
+                         '/uploads/images/' . $type . '/' . $imageType['folder'],
                         $imageType['ratio']['width'],
                         $imageType['ratio']['height']
                         );

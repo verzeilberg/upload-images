@@ -1,0 +1,5 @@
+route_name:
+  path: /crop
+  controller: verzeilberg\UploadImagesBundle\Controller\Crop\CropController::crop
+  options:
+    expose: true
