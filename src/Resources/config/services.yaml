@@ -1,0 +1,3 @@
+UploadImagesBundle\Controller\Crop:
+  resource: '../../src/Controller/Crop'
+  tags: ['controller.service_arguments']

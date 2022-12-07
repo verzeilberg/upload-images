@@ -30,6 +30,7 @@ class UploadImagesExtension extends Extension
                 }
             }
         }
+
         $container->setParameter('upload_images',  $imageSettings);
         $loader = new YamlFileLoader($container, new FileLocator(dirname(__DIR__).'/Resources'));
         $loader->load('services.yaml');

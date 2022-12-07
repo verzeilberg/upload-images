@@ -205,7 +205,7 @@ class Image implements Serializable
 
     public function getImageLocationByType($type = 'original')
     {
-        $imageType = $this->getImageByType();
+        $imageType = $this->getImageByType($type);
         return $imageType->getFolder() . $this->getNameImage();
     }
 

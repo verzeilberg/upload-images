@@ -194,12 +194,13 @@ class Image
     public function processImageTypes($folder, $imageName)
     {
         $imageTypes = [];
+        $mainFolder = $this->params[$this->imageType]['upload_folder'];
         foreach ($this->params[$this->imageType]['image_types'] as $type => $imageType) {
             switch ($imageType['type_crop']) {
                 case 'auto':
                     $this->cropService->resizeAndCropImage(
                         $this->projectDir . $folder . $imageName,
-                        $this->projectDir . '/uploads/images/' . $type . '/' . $imageType['folder'],
+                        $this->projectDir . $mainFolder . $imageType['folder'],
                         $imageType['ratio']['width'],
                         $imageType['ratio']['height']
                     );
@@ -209,8 +210,9 @@ class Image
                 case 'manual':
                     $this->saveImageIntoSession(
                         $type,
+                        $this->projectDir,
                         $folder . $imageName,
-                         '/uploads/images/' . $type . '/' . $imageType['folder'],
+                        $mainFolder . $imageType['folder'] . '/',
                         $imageType['ratio']['width'],
                         $imageType['ratio']['height']
                         );
@@ -262,35 +264,35 @@ class Image
 
     /**
      * @param $type
-     * @param $sOriLocation
-     * @param $sDestinationFolder
-     * @param $iImgWidth
-     * @param $iImgHeight
+     * @param null $sProjectDirectory
+     * @param null $sOriginalLocation
+     * @param null $sDestinationFolder
+     * @param null $iImgWidth
+     * @param null $iImgHeight
      * @return void
      */
     private function saveImageIntoSession(
         $type,
-        $sOriLocation = null,
+        $sProjectDirectory = null,
+        $sOriginalLocation = null,
         $sDestinationFolder = null,
         $iImgWidth = null,
         $iImgHeight = null
     )
     {
-
         $image = [
-            'oriLocation'           => $sOriLocation,
+            'projectDirectory'      => $sProjectDirectory,
+            'originalLocation'      => $sOriginalLocation,
             'destinationLocation'   => $sDestinationFolder,
             'width'                 => $iImgWidth,
             'height'                => $iImgHeight
         ];
 
         $manualImages = [];
-        if($this->checkImageInSession()) {
+        if ($this->checkImageInSession()) {
             $manualImages = $this->session->get('manual_images');
-            $manualImages[$type] = $image;
-        } else {
-            $manualImages[$type] = $image;
         }
+        $manualImages[$type] = $image;
 
         $this->session->set('manual_images', $manualImages);
     }
@@ -319,6 +321,15 @@ class Image
         } else {
             throw new ImageException('No images in session!');
         }
+    }
+
+    /**
+     * @param $manualImages
+     * @return void
+     */
+    public function setImagesIntoSession($manualImages)
+    {
+        $this->session->set('manual_images', $manualImages);
     }
 
     /**

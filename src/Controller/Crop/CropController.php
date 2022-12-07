@@ -2,40 +2,95 @@
 // src/Controller/Crop/CropController.php
 namespace verzeilberg\UploadImagesBundle\Controller\Crop;
 
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use verzeilberg\UploadImagesBundle\Form\Image\Crop;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use verzeilberg\UploadImagesBundle\Service\Crop as CropService;
 use verzeilberg\UploadImagesBundle\Service\Image as ImageService;
 
+/**
+ * @Route(service="test_service")
+ */
 class CropController extends AbstractController
 {
 
     /** @var ImageService */
+    private $cropService;
+    /** @var ImageService  */
     private $imageService;
 
-    public function __construct(ImageService $imageService)
+    /**
+     * @param CropService $cropService
+     * @param ImageService $imageService
+     */
+    public function __construct(
+        CropService $cropService,
+        ImageService $imageService
+    )
     {
+        $this->cropService  = $cropService;
         $this->imageService = $imageService;
     }
 
-    public function crop($returnController,Request $request)
+    /**
+     * @param Request $request
+     * @return void
+     */
+    public function crop(Request $request)
     {
         $imagesToBeCropped = $this->imageService->getImagesFromSession();
 
-        $sImageToBeCropped = $imagesToBeCropped['blogging2']['oriLocation'];
+        //Get the first item in the array
+        $imageToBeCropped           = array_values($imagesToBeCropped)[0];
+        $projectLocation            = $imageToBeCropped['projectDirectory'];
+        $imageOriginalLocation      = $imageToBeCropped['originalLocation'];
+        $imageDestinationLocation   = $imageToBeCropped['destinationLocation'];
+        $imageHeight                = $imageToBeCropped['height'];
+        $imageWidth                 = $imageToBeCropped['width'];
 
         $form = $this->createForm(Crop::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
-            var_dump($data); die;
+
+            $croppedX = $data['detailX'];
+            $croppedY = $data['detailY'];
+            $croppedH = $data['detailW'];
+            $croppedW = $data['detailH'];
+
+            $this->cropService->CropImage(
+                $projectLocation . $imageOriginalLocation,
+                $projectLocation . $imageDestinationLocation,
+                $croppedX,
+                $croppedY,
+                $croppedW,
+                $croppedH,
+                $imageWidth,
+                $imageHeight
+            );
+
+            # Delete the first item of the array
+            array_shift($imagesToBeCropped);
+            $this->imageService->setImagesIntoSession($imagesToBeCropped);
+
+            # Check if the array is empty
+            if (empty($imagesToBeCropped)) {
+                return $this->redirectToRoute('app_userprofile');
+            } else {
+                return $this->redirectToRoute('app_cropimage');
+            }
+
         }
 
 
         return $this->render('@UploadImages/Crop/index.html.twig', [
-            'sImageToBeCropped' => $sImageToBeCropped,
-            'form' => $form->createView(),
+            'sImageToBeCropped' => $imageOriginalLocation,
+            'imageHeight'       => $imageHeight,
+            'imageWidth'        => $imageWidth,
+            'form'              => $form->createView(),
         ]);
     }
 }
