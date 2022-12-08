@@ -5,7 +5,6 @@ namespace verzeilberg\UploadImagesBundle\Form\Image;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use verzeilberg\UploadImagesBundle\Entity\Image;
@@ -15,19 +14,19 @@ class Crop extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('detailX', TextType::class, [
+            ->add('detailX', HiddenType::class, [
                 'required' => true,
                 'attr' => ['id' => 'detailx']
             ])
-            ->add('detailY', TextType::class, [
+            ->add('detailY', HiddenType::class, [
                 'required' => true,
                 'attr' => ['id' => 'detaily']
             ])
-            ->add('detailW', TextType::class, [
+            ->add('detailW', HiddenType::class, [
                 'required' => true,
                 'attr' => ['id' => 'detailw']
             ])
-            ->add('detailH', TextType::class, [
+            ->add('detailH', HiddenType::class, [
                 'required' => true,
                 'attr' => ['id' => 'detailh']
             ])

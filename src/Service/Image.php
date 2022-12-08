@@ -332,6 +332,11 @@ class Image
         $this->session->set('manual_images', $manualImages);
     }
 
+    public function removeImagesFromSession()
+    {
+        $this->session->remove('manual_images');
+    }
+
     /**
      * Delete file from server
      * @param $fileName

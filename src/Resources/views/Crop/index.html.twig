@@ -4,19 +4,20 @@
     <script src="{{ asset('bundles/uploadimages/js//jquery.min.js') }}"></script>
     <script src="{{ asset('bundles/uploadimages/js/cropperjs/cropper.min.js') }}"></script>
     <style>
-        .cropBox
-        {
-            max-height:600px;
-        }
+        .cropBox {max-height: 600vh;}
     </style>
     <script>
         $(document).ready(function () {
             const image = document.getElementById('avatar');
             const cropper = new Cropper(image, {
+                viewMode: 1,
                 aspectRatio: "{{ imageWidth }}" / " {{ imageHeight }}",
+                background: true,
+                zoomable: false,
+                responsive: true,
                 crop(event) {
                     $('input#crop_detailX').val(event.detail.x);
-                    $('input#crop_detailY').val(event.detail.x);
+                    $('input#crop_detailY').val(event.detail.y);
                     $('input#crop_detailW').val(event.detail.width);
                     $('input#crop_detailH').val(event.detail.height);
                 },
@@ -24,16 +25,13 @@
         });
     </script>
 {% endblock %}
-
-
 {% block content %}
-    <div class="">
-        <div class=" cropBox" >
+    <div class="row">
+        <div class="cropBox col-md-12">
             <img id="avatar" src="{{ sImageToBeCropped }}">
         </div>
     </div>
-
-    <div class="row">
+    <div class="row mt-2">
         <div class="col-md-4">
             {{ form(form) }}
         </div>

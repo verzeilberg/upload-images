@@ -41,6 +41,8 @@ class CropController extends AbstractController
      */
     public function crop(Request $request)
     {
+        $redirectUrl = $request->query->get('returnUrl');
+
         $imagesToBeCropped = $this->imageService->getImagesFromSession();
 
         //Get the first item in the array
@@ -58,8 +60,8 @@ class CropController extends AbstractController
 
             $croppedX = $data['detailX'];
             $croppedY = $data['detailY'];
-            $croppedH = $data['detailW'];
-            $croppedW = $data['detailH'];
+            $croppedH = $data['detailH'];
+            $croppedW = $data['detailW'];
 
             $this->cropService->CropImage(
                 $projectLocation . $imageOriginalLocation,
@@ -78,13 +80,13 @@ class CropController extends AbstractController
 
             # Check if the array is empty
             if (empty($imagesToBeCropped)) {
-                return $this->redirectToRoute('app_userprofile');
+                $this->imageService->removeImagesFromSession();
+                return $this->redirectToRoute($redirectUrl);
             } else {
-                return $this->redirectToRoute('app_cropimage');
+                return $this->redirectToRoute('app_cropimage', ['returnUrl' => $redirectUrl]);
             }
 
         }
-
 
         return $this->render('@UploadImages/Crop/index.html.twig', [
             'sImageToBeCropped' => $imageOriginalLocation,
