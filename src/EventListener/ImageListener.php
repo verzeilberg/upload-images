@@ -9,6 +9,7 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreFlushEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use verzeilberg\UploadImagesBundle\Entity\ImageType;
+use verzeilberg\UploadImagesBundle\Metadata\Reader\ImageAnnotationReader;
 use verzeilberg\UploadImagesBundle\Service\Image as ImageService;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -27,6 +28,8 @@ class ImageListener
     /** @ORM\PrePersist */
     public function prePersistHandler(Image $image, LifecycleEventArgs $event)
     {
+        //$reader = new ImageAnnotationReader();
+        //$reader->loadMetadataForClass($image);
         $this->processImageBeforeSave($image);
     }
 
